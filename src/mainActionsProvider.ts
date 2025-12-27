@@ -74,6 +74,13 @@ export class MainActionsProvider implements vscode.TreeDataProvider<ActionItem> 
                     'View team leaderboard showing code quality improvements and issue resolutions across contributors'
                 ),
                 new ActionItem(
+                    '🌳 Code Visualizer',
+                    'Visualize codebase structure',
+                    'what-the-code.openCodeVisualizer',
+                    new vscode.ThemeIcon('type-hierarchy'),
+                    'Open interactive code visualizer to explore your project structure, file dependencies, and codebase overview'
+                ),
+                new ActionItem(
                     '💬 Feedback',
                     'Send feedback or report an issue',
                     'what-the-code.openFeedback',

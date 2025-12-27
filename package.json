@@ -168,6 +168,12 @@
         "title": "🏆 Open Team Leaderboard",
         "category": "What-The-Code",
         "icon": "$(trophy)"
+      },
+      {
+        "command": "what-the-code.openCodeVisualizer",
+        "title": "🌳 Open Code Visualizer",
+        "category": "What-The-Code",
+        "icon": "$(type-hierarchy)"
       }
     ],
     "viewsContainers": {
@@ -210,6 +216,12 @@
           "name": "📄 Quality Reports",
           "when": "true",
           "icon": "$(file-text)"
+        },
+        {
+          "id": "what-the-code-visualizer",
+          "name": "🌳 Code Visualizer",
+          "when": "true",
+          "icon": "$(type-hierarchy)"
         }
       ]
     },
@@ -304,6 +316,12 @@
           "when": "view == what-the-code-reports",
           "group": "navigation@4",
           "icon": "$(trophy)"
+        },
+        {
+          "command": "what-the-code.openCodeVisualizer",
+          "when": "view == what-the-code-visualizer",
+          "group": "navigation@1",
+          "icon": "$(type-hierarchy)"
         }
       ],
       "view/item/context": [
@@ -348,6 +366,11 @@
         "command": "what-the-code.openTeamLeaderboard",
         "key": "ctrl+shift+alt+l",
         "mac": "cmd+shift+alt+l"
+      },
+      {
+        "command": "what-the-code.openCodeVisualizer",
+        "key": "ctrl+shift+alt+v",
+        "mac": "cmd+shift+alt+v"
       }
     ],
     "configuration": {
@@ -360,10 +383,10 @@
         },
         "whatTheCode.geminiModel": {
           "type": "string",
-          "default": "gemini-1.5-flash",
+          "default": "gemini-2.5-flash",
           "description": "Gemini model to use for code analysis",
           "enum": [
-            "gemini-1.5-flash",
+            "gemini-2.5-flash",
             "gemini-1.5-pro",
             "gemini-pro"
           ],

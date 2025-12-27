@@ -7,7 +7,7 @@ export class GeminiProvider implements AIProvider {
 	private endpoint: string;
 	private model: string;
 
-	constructor(apiKey: string, model: string = 'gemini-1.5-flash') {
+	constructor(apiKey: string, model: string = 'gemini-2.5-flash') {
 		this.apiKey = apiKey;
 		this.model = model;
 		this.endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent`;

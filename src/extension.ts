@@ -14,6 +14,8 @@ import { HTMLReportGenerator } from './htmlReportGenerator';
 import { ReportsProvider } from './reportsProvider';
 import { DeadCodeAnalyzer } from './analyzeDeadCode';
 import { ProjectFileCollector } from './getProjectFiles';
+import { CodeVisualizerProvider } from './codeVisualizer';
+import { VisualizerActionsProvider } from './visualizerActionsProvider';
 
 async function displayResults(query: string, results: SearchResult[], resultsProvider: SearchResultsProvider) {
 	resultsProvider.updateResults(query, results);
@@ -119,7 +121,7 @@ class CodeSearchProvider {
 
 	   private getAIProvider(): AIProvider {
 			   let apiKey = this.config.get<string>('geminiApiKey', '');
-			   const model = this.config.get<string>('geminiModel', 'gemini-1.5-flash');
+			   const model = this.config.get<string>('geminiModel', 'gemini-2.5-flash');
 			   return new GeminiProvider(apiKey, model);
 	   }
 
@@ -230,6 +232,13 @@ export function activate(context: vscode.ExtensionContext) {
 			   showCollapseAll: false
 	   });
 	   
+	   // Initialize Code Visualizer
+	   const visualizerActionsProvider = new VisualizerActionsProvider();
+	   vscode.window.createTreeView('what-the-code-visualizer', {
+			   treeDataProvider: visualizerActionsProvider,
+			   showCollapseAll: false
+	   });
+	   
 	   const deadCodeFinder = new DeadCodeFinder();
 	   const deadCodeRemover = new DeadCodeRemover();
 	   const searchCommand = vscode.commands.registerCommand('what-the-code.searchCode', async () => {
@@ -286,7 +295,7 @@ export function activate(context: vscode.ExtensionContext) {
 	   const testGeminiCommand = vscode.commands.registerCommand('what-the-code.testGemini', async () => {
 			   const config = vscode.workspace.getConfiguration('whatTheCode');
 			   let apiKey = config.get<string>('geminiApiKey', '');
-			   const model = config.get<string>('geminiModel', 'gemini-1.5-flash');
+			   const model = config.get<string>('geminiModel', 'gemini-2.5-flash');
 			   await vscode.window.withProgress({
 					   location: vscode.ProgressLocation.Notification,
 					   title: 'Testing Gemini connection...',
@@ -646,6 +655,16 @@ export function activate(context: vscode.ExtensionContext) {
        }
    });
    
+   // Code Visualizer
+   const codeVisualizerProvider = new CodeVisualizerProvider(context);
+   const openCodeVisualizerCommand = vscode.commands.registerCommand('what-the-code.openCodeVisualizer', async () => {
+       try {
+           await codeVisualizerProvider.openVisualizer();
+       } catch (error) {
+           vscode.window.showErrorMessage(`Failed to open code visualizer: ${error}`);
+       }
+   });
+   
 	   const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	   statusBarItem.text = '$(search) Ask Code';
 	   statusBarItem.command = 'what-the-code.searchCode';
@@ -698,7 +717,10 @@ export function activate(context: vscode.ExtensionContext) {
 			   openReportsFolderCommand,
 			   openTeamLeaderboardCommand,
 			   htmlReportGenerator,
-			   reportsProvider
+			   reportsProvider,
+			   openCodeVisualizerCommand,
+			   codeVisualizerProvider,
+			   visualizerActionsProvider
 	   );
 	   console.log('✅ What-The-Code extension fully activated!');
 }
